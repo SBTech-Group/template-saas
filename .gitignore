@@ -1,0 +1,50 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build
+dist/
+dist-ssr/
+*.local
+
+# Environment — NUNCA commitar .env com valores reais
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Vite
+.vite/
+
+# Supabase
+supabase/.branches/
+supabase/.temp/
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Chaves e certificados — nunca versionar (SBAGENTS SEC-02)
+*.pem
+*.key
+*.p12
+*.pfx
+.env.*
+!.env.example
+.mcp.json
+
+# TypeScript
+*.tsbuildinfo
