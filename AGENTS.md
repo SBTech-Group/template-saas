@@ -62,6 +62,10 @@ Toda função nova que usa a service role autentica quem chama dentro da funçã
 | `HUB_URL` (`https://zzhkigjadsfultoynmha.supabase.co/functions/v1`), `HUB_PRODUCT_SLUG` (`{{PRODUTO_SLUG}}`) | Supabase do produto |
 | `APP_URL`, `SYSTEM_ADMIN_EMAIL` | Supabase do produto |
 
+## Ambientes
+
+Projeto no Coolify com dois environments: `homologação` (servidor Homologação, branch `hml`, `<slug>-hlg.sbtech-group.com`) e `produção` (servidor Produção, branch `main`, `<slug>.sbtech-group.com`). `VITE_SUPABASE_*` são manuais por ambiente e o deploy só roda depois delas. Detalhes em `../SBAGENTS/standards/arquitetura.md > Ambientes`. Erros de log e deploy falho chegam como cards em Tarefas do Hub (Sentinela).
+
 ## Pontos sensíveis
 
 | Área | Por que é sensível |
