@@ -1,0 +1,47 @@
+name: Branch policy
+
+# Sem GitHub Pro não há proteção de branch em repositório privado. Este check
+# não bloqueia, mas deixa vermelho o que fere o fluxo:
+#   agente/<nome>/<assunto> → PR para staging → PR staging → main (ou hotfix/*).
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [staging, main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  pr-para-main:
+    # No próprio repositório-template (só main) não se aplica; vale nos produtos gerados a partir dele.
+    if: github.event_name == 'pull_request' && !github.event.repository.is_template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Origem do PR
+        env:
+          HEAD: ${{ github.head_ref }}
+        run: |
+          case "$HEAD" in
+            staging|hotfix/*) echo "ok: $HEAD → main" ;;
+            *) echo "::error::PR para main só a partir de staging ou hotfix/* (recebido: $HEAD)"; exit 1 ;;
+          esac
+
+  push-via-pr:
+    if: github.event_name == 'push' && !github.event.repository.is_template
+    runs-on: ubuntu-latest
+    steps:
+      - name: Commit veio de PR mergeado?
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          n=$(gh api "repos/$REPO/commits/$SHA/pulls" --jq 'map(select(.merged_at != null)) | length')
+          if [ "$n" = "0" ]; then
+            echo "::error::Push direto em ${GITHUB_REF_NAME} sem PR (commit $SHA). Use agente/<nome>/<assunto> e abra PR."
+            exit 1
+          fi
+          echo "ok: $SHA veio de PR mergeado"

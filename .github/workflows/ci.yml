@@ -2,14 +2,14 @@ name: CI
 
 on:
   pull_request:
-    branches: [hml, main]
+    branches: [staging, main]
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Check tracked secrets
         shell: bash
@@ -24,7 +24,7 @@ jobs:
           fi
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
