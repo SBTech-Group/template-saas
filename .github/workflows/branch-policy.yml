@@ -16,7 +16,8 @@ permissions:
 
 jobs:
   pr-para-main:
-    if: github.event_name == 'pull_request'
+    # No próprio repositório-template (só main) não se aplica; vale nos produtos gerados a partir dele.
+    if: github.event_name == 'pull_request' && !github.event.repository.is_template
     runs-on: ubuntu-latest
     steps:
       - name: Origem do PR
@@ -29,7 +30,7 @@ jobs:
           esac
 
   push-via-pr:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' && !github.event.repository.is_template
     runs-on: ubuntu-latest
     steps:
       - name: Commit veio de PR mergeado?
