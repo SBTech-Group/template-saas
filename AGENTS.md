@@ -2,7 +2,7 @@
 
 - Tipo: `{{MODALIDADE}}`
 - Segue: SBAGENTS v{{SBAGENTS_VERSAO}} (padrões em `../SBAGENTS/standards/00-index.md`, somente leitura)
-- Branches: `hml` (homologação, recebe os PRs) · `main` (produção, só recebe PR de `hml`). Agentes trabalham em `agente/<nome>/<assunto>`.
+- Branches: `staging` (homologação, recebe os PRs) · `main` (produção, só recebe PR de `staging`). Agentes trabalham em `agente/<nome>/<assunto>`.
 - Repo: `SBTech-Group/{{PRODUTO_SLUG}}`. Criado pelo Admin Hub a partir de `template-{{TEMPLATE}}`.
 
 ## O que este sistema faz
@@ -64,7 +64,9 @@ Toda função nova que usa a service role autentica quem chama dentro da funçã
 
 ## Ambientes
 
-Projeto no Coolify com dois environments: `homologação` (servidor Homologação, branch `hml`, `<slug>-hlg.sbtech-group.com`) e `produção` (servidor Produção, branch `main`, `<slug>.sbtech-group.com`). `VITE_SUPABASE_*` são manuais por ambiente e o deploy só roda depois delas. Detalhes em `../SBAGENTS/standards/arquitetura.md > Ambientes`. Erros de log e deploy falho chegam como cards em Tarefas do Hub (Sentinela).
+Projeto no Coolify com dois environments: `homologação` (servidor Homologação, branch `staging`, `<slug>-hlg.sbtech-group.com`) e `produção` (servidor Produção, branch `main`, `<slug>.sbtech-group.com`). `VITE_SUPABASE_*` são manuais por ambiente e o deploy só roda depois delas. Detalhes em `../SBAGENTS/standards/arquitetura.md > Ambientes`. Erros de log e deploy falho chegam como cards em Tarefas do Hub (Sentinela).
+
+Workflows: `ci.yml` (job `verify`), `branch-policy.yml` (sinaliza push direto e PR para `main` fora de `staging`/`hotfix/*`), `functions.yml` e `database.yml` (Edge Functions e migrations novas de `staging` no Supabase de HML; precisam do secret `SUPABASE_ACCESS_TOKEN` e da variável `SUPABASE_PROJECT_REF`). Banco e funções não mudam por fora desses workflows.
 
 ## Pontos sensíveis
 
